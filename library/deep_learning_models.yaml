@@ -1,0 +1,76 @@
+# TEMPORAL FUSION TRANSFORMER
+model: TFTModel
+model_params:
+  input_chunk_length: 6
+  output_chunk_length: 4
+  hidden_size: 16
+  lstm_layers: 1
+  num_attention_heads: 4
+  full_attention: True
+  feed_forward: GatedResidualNetwork
+  dropout: 0.1
+  hidden_continuous_size: 8
+  add_relative_index: True  # not a model param but somehow input into the model instantiation
+  # By default, the TFT model is probabilistic and uses a likelihood instead (QuantileRegression). 
+  loss_fn: null
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  likelihood_cls: darts.utils.likelihood_models.QuantileRegression
+
+# TRANSFORMER MODEL
+model: TransformerModel
+model_params:
+  input_chunk_length: 6
+  output_chunk_length: 3
+  d_model: 64
+  nhead: 4
+  num_encoder_layers: 3
+  num_decoder_layers: 3
+  dim_feedforward: 512
+  dropout: 0.1
+  activation: "relu"
+  loss_fn:
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  likelihood: QuantileRegression
+
+# TEMPORAL CONVOLUTIONAL NETWORK
+model: TCNModel
+model_params:
+  input_chunk_length: 6
+  output_chunk_length: 3
+  kernel_size: 3
+  num_filters: 3
+  num_layers: 4
+  dilation_base: 2
+  weight_norm: false
+  dropout: 0.3
+  loss_fn:
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  likelihood: QuantileRegression
+
+# RECURRENT NEURAL NETWORKS - Vanilla RNN / GRU / LSTM
+# Warning: works only if using future_covariates
+model: RNNModel
+model_params:
+  input_chunk_length: 6
+  model: LSTM    # or RNN or GRU
+  hidden_dim: 25
+  n_rnn_layers: 2
+  dropout: 0.1
+  training_length: 24  
+  loss_fn:
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  likelihood: QuantileRegression
+
+# BLOCK RECURRENT NEURAL NETWORKS - Vanilla RNN / GRU / LSTM
+model: BlockRNNModel
+model_params:
+  input_chunk_length: 6
+  output_chunk_length: 3
+  model: LSTM    # or RNN or GRU
+  hidden_dim: 25
+  n_rnn_layers: 2
+  hidden_fc_sizes:
+  dropout: 0.1
+  loss_fn:
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  likelihood: QuantileRegression

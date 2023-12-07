@@ -1,0 +1,68 @@
+# main config to train models
+project_name: Tanker_TC                                 # Used for WANDB
+version_name: v0                   # Make run unique by changing this counter
+project_dir: C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover
+
+# model specific settings
+data_sources:  # first entry should contain the target variable
+- C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover\residuals\external_data.parquet
+- C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover\residuals\LR1_1Y_TC.parquet
+# all defined values here should be contained in target variable name
+target:
+- TC
+- LR1
+
+# model parameters
+model: TFTModel
+model_params:
+  input_chunk_length: 8
+  output_chunk_length: 3
+  hidden_size: 32
+  lstm_layers: 1
+  num_attention_heads: 4
+  full_attention: true
+  feed_forward: GatedResidualNetwork
+  dropout: 0.1
+  hidden_continuous_size: 32
+  add_relative_index: true  # not a model param but somehow input into the model instantiation
+  # By default, the TFT model is probabilistic and uses a likelihood instead (QuantileRegression). 
+  loss_fn:
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  likelihood: QuantileRegression
+
+# trainer params for deep learning models (TFT, ...)
+trainer_params:
+  n_epochs: 500
+  batch_size: 32
+  learning_rate: 0.001
+  optimizer: Adam
+  lr_scheduler: ReduceLROnPlateau
+  # callbacks
+  early_stopping:
+    monitor: val_loss
+    patience: 15
+    min_delta: 0.01
+    mode: min
+    verbose: true
+
+# data preprocessing parameters
+stage: train
+data_date_start: 2000-01-01  # use 'min' or a date
+data_date_stop: today   # use 'max' or 'today' or a date
+forecast_horizon: 60
+trim_initial_zeros: true
+trim_low_corr_variables_upfront: 0
+split: .85        # train/test %
+test_set_at_beginning: true
+covariates_preprocess:
+  MinMaxScaler:
+  PCA:
+    n_components: 0.95
+target_preprocess:
+  MaxAbsScaler:
+pca_corr_cutoff: 0
+
+# prediction parameters
+reload_best_model_for_inference: false
+num_samples: 100
+n_jobs: 32

@@ -1,0 +1,13 @@
+# example parameters for statistical models
+# choose from: AutoARIMA
+model: AutoARIMA
+model_params:
+  start_p: 1    #AR
+  max_p: 4
+  d: null       #I
+  start_q: 1    #MA
+  max_q: 4
+  seasonal: true
+  m: 12         # seasonality period
+  trace: true
+  stepwise: true

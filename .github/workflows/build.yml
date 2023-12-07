@@ -1,0 +1,47 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: build
+
+on:
+  push:
+    branches: 
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build:
+    timeout-minutes: 60
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ['3.10']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install wheel
+        pip install -e .
+    - name: Lint with flake8
+      uses: wearerequired/lint-action@v1
+      with:
+        black: true
+        black_args: --line-length=99
+        flake8: true
+        flake8_args: --max-line-length=99 --ignore=E203
+    - name: Test with pytest
+      run: pytest

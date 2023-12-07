@@ -1,0 +1,13 @@
+# example parameters for Boosting models
+# choose from: XGBModel, CatBoostModel, LightGBMModel
+model: XGBModel
+model_params:
+  lags: 12
+  lags_past_covariates: 12
+  lags_future_covariates: [12, 6]
+  output_chunk_length: 6
+  add_encoders: null
+  likelihood: quantile
+  quantiles: [0.01, 0.025, 0.05, 0.1, 0.2, 0.5, 0.8, 0.9, 0.95, 0.975, 0.99]
+  random_state: null
+  multi_models: true
