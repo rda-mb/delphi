@@ -8,7 +8,7 @@ from delphi.train import train
 # define dict of target: datasources
 segments = ["Aframax", "LR1", "LR2", "MR", "Suezmax", "VLCC"]
 config_file = (
-    r"C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover\darts_tankerTC_configs.yaml"
+    r"configs.yaml"
 )
 configs = UserConfig(config_file)
 # overwrite params in configs.hparams.variable

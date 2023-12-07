@@ -1,16 +1,15 @@
 # main config to train models
 project_name: Tanker_TC                                 # Used for WANDB
 version_name: v0                   # Make run unique by changing this counter
-project_dir: C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover
+project_dir: \path\to\folder
 
 # model specific settings
 data_sources:  # first entry should contain the target variable
-- C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover\residuals\external_data.parquet
-- C:\Users\admrda\OneDrive - Maersk Broker\python\TC handover\residuals\LR1_1Y_TC.parquet
+- .\external_data.parquet
+- .\target.parquet
 # all defined values here should be contained in target variable name
 target:
-- TC
-- LR1
+- Price
 
 # model parameters
 model: TFTModel

@@ -74,21 +74,19 @@ Every run uses a config file in `.yaml` format to pass in user configurations su
 
 ```yaml
 # main config to train models
-project_name: fleet_stats                                 
+project_name: ts_forecast                                 
 version_name: v0                     # Make run unique by changing this counter
-project_dir: C:\Users\admrda\Documents\codes\fleet-forecasting
+project_dir: \path\to\folder
 
 # model specific settings
 data_sources:
-- C:\Users\admrda\Documents\codes\fleet-forecasting\data\model_input\fleet_stats.parquet
-- C:\Users\admrda\Documents\codes\fleet-forecasting\data\model_input\imf_weo.csv
+- .\ext_data.parquet
+- .\imf.csv
 # all defined values here should be contained in target variable name
 # useful for organizing category, sub-category, etc...
 # can also use the full target name as is
 target:
-- Fleet_capacity
-- product
-- LR2
+- Price
 
 # model parameters
 model: TFTModel
